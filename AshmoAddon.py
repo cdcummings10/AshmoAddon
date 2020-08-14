@@ -28,6 +28,17 @@ class CenterOperator(bpy.types.Operator):
         bpy.ops.export_scene.fbx("INVOKE_DEFAULT") # brings up export .fbx menu
         return {'FINISHED'}
 
+class FreezeTransformsOperator(bpy.types.Operator):
+    """Tooltip"""
+    bl_idname = "object.freeze"
+    bl_label = "Freeze Transforms"
+    bl_options = {'REGISTER', 'UNDO'}
+    
+    def execute(self, context):
+        bpy.context.view_layer.objects.active.location = (0,0,0) # centers the selected object
+        bpy.context.view_layer.objects.active.rotation_euler = (0,0,0) # fixes rotation
+        bpy.context.view_layer.objects.active.scale = (1,1,1) # sets scale to 1
+        return {'FINISHED'}
 
 # create a panel on the sidebar
 class AshmoPanel(bpy.types.Panel):
@@ -43,15 +54,19 @@ class AshmoPanel(bpy.types.Panel):
         
         row = layout.row() # adds an empty row
         row.operator("object.center", icon="PIVOT_CURSOR")
+        row = layout.row() # adds an empty row
+        row.operator("object.freeze", icon="CURSOR")
         
 # registers and unregisters the class
 def register():
     bpy.utils.register_class(AshmoPanel)
     bpy.utils.register_class(CenterOperator)
+    bpy.utils.register_class(FreezeTransformsOperator)
     
 def unregister():
     bpy.utils.register_class(AshmoPanel)
     bpy.utils.register_class(CenterOperator)
+    bpy.utils.register_class(FreezeTransformsOperator)
     
 if __name__ == "__main__":
     register()
