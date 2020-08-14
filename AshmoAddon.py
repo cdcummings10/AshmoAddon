@@ -16,19 +16,18 @@ import bpy # importing blender python
 def test_function():
     print("My function")
 
-# create a custom operator for the custom button
+# create a menu button that centers the selection to (0,0,0) and brings up the export(.fbx) menu
 class CenterOperator(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "object.center"
-    bl_label = "Center Mesh"
+    bl_label = "Center Mesh and Export(.fbx)"
     bl_options = {'REGISTER', 'UNDO'}
     
     def execute(self, context):
-        active_obj = bpy.context.view_layer.objects.active
-        active_obj.location.x = 0
-        active_obj.location.y = 0
-        active_obj.location.z = 0
+        bpy.context.view_layer.objects.active.location = (0,0,0) # centers the selected object
+        bpy.ops.export_scene.fbx("INVOKE_DEFAULT") # brings up export .fbx menu
         return {'FINISHED'}
+
 
 # create a panel on the sidebar
 class AshmoPanel(bpy.types.Panel):
@@ -43,7 +42,7 @@ class AshmoPanel(bpy.types.Panel):
         layout = self.layout
         
         row = layout.row() # adds an empty row
-        row.operator("object.center", icon="CUBE")
+        row.operator("object.center", icon="PIVOT_CURSOR")
         
 # registers and unregisters the class
 def register():
