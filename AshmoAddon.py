@@ -35,9 +35,14 @@ class FreezeTransformsOperator(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
     
     def execute(self, context):
+        bpy.context.view_layer.objects.active.delta_location = bpy.context.view_layer.objects.active.location
         bpy.context.view_layer.objects.active.location = (0,0,0) # centers the selected object
+        bpy.context.view_layer.objects.active.delta_rotation_euler = bpy.context.view_layer.objects.active.rotation_euler
         bpy.context.view_layer.objects.active.rotation_euler = (0,0,0) # fixes rotation
+        bpy.context.view_layer.objects.active.delta_scale = bpy.context.view_layer.objects.active.scale
         bpy.context.view_layer.objects.active.scale = (1,1,1) # sets scale to 1
+        bpy.context.scene.cursor.location = (0.0, 0.0, 0.0) #set cursor to 0,0,0
+        bpy.ops.object.origin_set(type='ORIGIN_CURSOR', center='MEDIAN') #set origin to cursor
         return {'FINISHED'}
 
 # create a panel on the sidebar
